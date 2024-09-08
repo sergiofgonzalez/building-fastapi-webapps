@@ -1,0 +1,473 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.8 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.8" pages="3">
+  <diagram name="Data Model" id="EgpjMcLHxA4D5ywwlKR7">
+    <mxGraphModel dx="1036" dy="606" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="3ekjOgICvye63avDb39q-1" value="Episode" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#dae8fc;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;sketch=1;curveFitting=1;jiggle=2;rounded=1;hachureGap=4;align=center;verticalAlign=middle;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="120" y="120" width="140" height="104" as="geometry" />
+        </mxCell>
+        <mxCell id="3ekjOgICvye63avDb39q-2" value="+ id: UUID" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontColor=default;sketch=1;curveFitting=1;jiggle=2;rounded=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=12;" parent="3ekjOgICvye63avDb39q-1" vertex="1">
+          <mxGeometry y="26" width="140" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="3ekjOgICvye63avDb39q-3" value="+ created_ts: datetime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontColor=default;sketch=1;curveFitting=1;jiggle=2;rounded=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=12;" parent="3ekjOgICvye63avDb39q-1" vertex="1">
+          <mxGeometry y="52" width="140" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="3ekjOgICvye63avDb39q-4" value="+ status: StatusEnum" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontColor=default;sketch=1;curveFitting=1;jiggle=2;rounded=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=12;" parent="3ekjOgICvye63avDb39q-1" vertex="1">
+          <mxGeometry y="78" width="140" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="3ekjOgICvye63avDb39q-15" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontColor=#4D4D4D;sketch=1;curveFitting=1;jiggle=2;" parent="1" source="3ekjOgICvye63avDb39q-5" target="3ekjOgICvye63avDb39q-11" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3ekjOgICvye63avDb39q-5" value="JournalEntry" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#dae8fc;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;sketch=1;curveFitting=1;jiggle=2;rounded=1;hachureGap=4;align=center;verticalAlign=middle;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="355" y="120" width="140" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="3ekjOgICvye63avDb39q-6" value="+ id: UUID" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontColor=default;sketch=1;curveFitting=1;jiggle=2;rounded=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=12;" parent="3ekjOgICvye63avDb39q-5" vertex="1">
+          <mxGeometry y="26" width="140" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="3ekjOgICvye63avDb39q-17" value="+ day: date" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontColor=default;sketch=1;curveFitting=1;jiggle=2;rounded=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=12;" parent="3ekjOgICvye63avDb39q-5" vertex="1">
+          <mxGeometry y="52" width="140" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="3ekjOgICvye63avDb39q-7" value="+ level: LevelEnum" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontColor=default;sketch=1;curveFitting=1;jiggle=2;rounded=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=12;" parent="3ekjOgICvye63avDb39q-5" vertex="1">
+          <mxGeometry y="78" width="140" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="3ekjOgICvye63avDb39q-8" value="+ remarks: type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontColor=default;sketch=1;curveFitting=1;jiggle=2;rounded=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=12;" parent="3ekjOgICvye63avDb39q-5" vertex="1">
+          <mxGeometry y="104" width="140" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="3ekjOgICvye63avDb39q-9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontColor=#4D4D4D;sketch=1;curveFitting=1;jiggle=2;" parent="1" source="3ekjOgICvye63avDb39q-3" target="3ekjOgICvye63avDb39q-7" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3ekjOgICvye63avDb39q-10" value="1..*" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontColor=#4D4D4D;sketch=1;curveFitting=1;jiggle=2;" parent="1" vertex="1">
+          <mxGeometry x="310" y="157" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="3ekjOgICvye63avDb39q-11" value="Symptoms" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#dae8fc;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;sketch=1;curveFitting=1;jiggle=2;rounded=1;hachureGap=4;align=center;verticalAlign=middle;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="355" y="280" width="140" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="3ekjOgICvye63avDb39q-12" value="+ id: UUID" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontColor=default;sketch=1;curveFitting=1;jiggle=2;rounded=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=12;" parent="3ekjOgICvye63avDb39q-11" vertex="1">
+          <mxGeometry y="26" width="140" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="3ekjOgICvye63avDb39q-20" value="+ symptom: str" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontColor=default;sketch=1;curveFitting=1;jiggle=2;rounded=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=12;" parent="3ekjOgICvye63avDb39q-11" vertex="1">
+          <mxGeometry y="52" width="140" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="3ekjOgICvye63avDb39q-16" value="1..*" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontColor=default;sketch=1;curveFitting=1;jiggle=2;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="420" y="250" width="60" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="w5vyJLcs_Wy2413HqThh" name="User journey">
+    <mxGraphModel dx="2302" dy="1347" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="5UqWuIjn1Tl4yy4o4QHo-1" value="Customer lands on the website and &lt;br&gt;we want to show a list of recent entries, episodes, statistics, and a form to enter a new journal entry." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;dashed=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="120" y="80" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="5UqWuIjn1Tl4yy4o4QHo-2" value="Customer" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#505050;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.devices.laptop;" vertex="1" parent="1">
+          <mxGeometry x="10" y="138" width="58" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="5UqWuIjn1Tl4yy4o4QHo-17" value="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="100" y="60" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="5UqWuIjn1Tl4yy4o4QHo-18" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="70" y="154.5" as="sourcePoint" />
+            <mxPoint x="110" y="154.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5UqWuIjn1Tl4yy4o4QHo-19" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="154.5" as="sourcePoint" />
+            <mxPoint x="430" y="154.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="K7_O1YF-4a5QfQCIeLH0-15" value="User types a new journal entry" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;dashed=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="450" y="80" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="K7_O1YF-4a5QfQCIeLH0-16" value="2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="430" y="60" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="K7_O1YF-4a5QfQCIeLH0-17" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="720" y="154.5" as="sourcePoint" />
+            <mxPoint x="760" y="154.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="K7_O1YF-4a5QfQCIeLH0-18" value="New journal entry details are processed to identify whether it is part of an existing or a new dizziness episode" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;dashed=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="800" y="80" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="K7_O1YF-4a5QfQCIeLH0-19" value="3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="780" y="60" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="K7_O1YF-4a5QfQCIeLH0-20" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1070" y="154.5" as="sourcePoint" />
+            <mxPoint x="1110" y="154.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="K7_O1YF-4a5QfQCIeLH0-21" value="New journal entry details are processed to identify whether it is part of an existing or a new dizziness episode" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;dashed=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="80" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="K7_O1YF-4a5QfQCIeLH0-22" value="4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="60" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="K7_O1YF-4a5QfQCIeLH0-23" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1430" y="154.5" as="sourcePoint" />
+            <mxPoint x="1470" y="154.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="K7_O1YF-4a5QfQCIeLH0-24" value="Statistics are calculated" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;dashed=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1520" y="80" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="K7_O1YF-4a5QfQCIeLH0-25" value="4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1500" y="60" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="K7_O1YF-4a5QfQCIeLH0-26" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1790" y="154.5" as="sourcePoint" />
+            <mxPoint x="1830" y="154.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="K7_O1YF-4a5QfQCIeLH0-27" value="User is presented with an updated view of the most recent entries, episodes and statistics, and a form to enter a new entry and repeat the operation." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;dashed=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1880" y="80" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="K7_O1YF-4a5QfQCIeLH0-28" value="5" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1860" y="60" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-1" value="Customer lands on the website and &lt;br&gt;we want to show a list of recent entries, episodes, statistics, and a form to enter a new journal entry." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;dashed=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="120" y="80" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-2" value="Customer" style="pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#505050;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.devices.laptop;" vertex="1" parent="1">
+          <mxGeometry x="10" y="138" width="58" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-3" value="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="100" y="60" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-4" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="70" y="154.5" as="sourcePoint" />
+            <mxPoint x="110" y="154.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-5" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="154.5" as="sourcePoint" />
+            <mxPoint x="430" y="154.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-6" value="User types a new journal entry" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;dashed=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="450" y="80" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-7" value="2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="430" y="60" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-8" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="720" y="154.5" as="sourcePoint" />
+            <mxPoint x="760" y="154.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-9" value="New journal entry details are processed to identify whether it is part of an existing or a new dizziness episode" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;dashed=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="800" y="80" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-10" value="3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="780" y="60" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-11" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1070" y="154.5" as="sourcePoint" />
+            <mxPoint x="1110" y="154.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-12" value="New journal entry details are processed to identify whether it is part of an existing or a new dizziness episode" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;dashed=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="80" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-13" value="3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="60" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-14" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1430" y="154.5" as="sourcePoint" />
+            <mxPoint x="1470" y="154.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-15" value="Statistics are calculated" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;dashed=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1520" y="80" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-16" value="4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1500" y="60" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-17" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1790" y="154.5" as="sourcePoint" />
+            <mxPoint x="1830" y="154.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-18" value="User is presented with an updated view of the most recent entries, episodes and statistics, and a form to enter a new entry and repeat the operation." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;dashed=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1880" y="80" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-19" value="5" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1860" y="60" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-20" value="Customer lands on the website and we want to show a list of recent entries, episodes, statistics, and a form to enter a new journal entry." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;verticalAlign=middle;fontColor=#333333;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="319" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-21" value="Customer" style="pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#505050;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.devices.laptop;" vertex="1" parent="1">
+          <mxGeometry y="377" width="58" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-22" value="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="90" y="297" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-23" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="60" y="393.5" as="sourcePoint" />
+            <mxPoint x="100" y="393.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-25" value="The most recent journal entries are returned." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;verticalAlign=middle;align=center;fontFamily=Helvetica;fontSize=12;fontColor=#333333;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="430" y="319" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-26" value="2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="410" y="297" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-27" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="393.5" as="sourcePoint" />
+            <mxPoint x="420" y="393.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-29" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;The most recent episodes are returned.&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;verticalAlign=middle;align=center;fontFamily=Helvetica;fontSize=12;fontColor=#333333;fontStyle=1;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="750" y="319" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-30" value="3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="730" y="297" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-32" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="700" y="393.5" as="sourcePoint" />
+            <mxPoint x="740" y="393.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-33" value="Statistics about the journal entries and episodes are returned." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;verticalAlign=middle;align=center;fontFamily=Helvetica;fontSize=12;fontColor=#333333;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="319" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-34" value="4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="297" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-36" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1030" y="393.5" as="sourcePoint" />
+            <mxPoint x="1070" y="393.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-37" value="User types a new entry." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;verticalAlign=middle;align=center;fontFamily=Helvetica;fontSize=12;fontColor=#333333;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="319" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-38" value="5" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="297" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-40" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1350" y="398.5" as="sourcePoint" />
+            <mxPoint x="1390" y="398.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-41" value="The details of the new journal entry are processed." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;verticalAlign=middle;align=center;fontFamily=Helvetica;fontSize=12;fontColor=#333333;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1395" y="558" width="255" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-42" value="6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1375" y="538" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-43" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1522" y="500" as="sourcePoint" />
+            <mxPoint x="1522" y="540" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-44" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1380" y="639.5" as="sourcePoint" />
+            <mxPoint x="1340" y="639.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-46" value="The details of the new journal entry are picked up to idenfity whether it is a new episode or the continuation of an existing one." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;verticalAlign=middle;align=center;fontFamily=Helvetica;fontSize=12;fontColor=#333333;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="560" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-47" value="7" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="538" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-49" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1052" y="639.5" as="sourcePoint" />
+            <mxPoint x="1012" y="639.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-50" value="With the episodes and entries updated, statistics are returned." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;verticalAlign=middle;align=center;fontFamily=Helvetica;fontSize=12;fontColor=#333333;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="752" y="560" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-51" value="8" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="732" y="538" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-53" value="The newly added entry is displayed, along with the latest information about episodes and statistics.&lt;div&gt;A form is presented to let the user type a new entry.&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;verticalAlign=middle;align=center;fontFamily=Helvetica;fontSize=12;fontColor=#333333;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="430" y="560" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-54" value="9" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="410" y="538" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6hU-VuLIAUqo4B1RKKa-56" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="730" y="639.5" as="sourcePoint" />
+            <mxPoint x="690" y="639.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="subdomain discovery" id="vovtd7LJFh7aVphxqBuj">
+    <mxGraphModel dx="2302" dy="1347" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="T1eXgJWzP-2BxgTHFj-d-0" />
+        <mxCell id="T1eXgJWzP-2BxgTHFj-d-1" parent="T1eXgJWzP-2BxgTHFj-d-0" />
+        <mxCell id="tPvOfe52DL4Rb17DQafK-0" value="&lt;b&gt;Application&amp;nbsp;&lt;/b&gt;subdomain" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;verticalAlign=top;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="110" y="319" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="tPvOfe52DL4Rb17DQafK-1" value="Customer" style="pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#505050;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.devices.laptop;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry y="377" width="58" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="tPvOfe52DL4Rb17DQafK-2" value="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="90" y="297" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tPvOfe52DL4Rb17DQafK-3" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="60" y="393.5" as="sourcePoint" />
+            <mxPoint x="100" y="393.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tPvOfe52DL4Rb17DQafK-4" value="When the customer lands on the website, we show a list of recent entries, episodes, statistics, and a form to let the user enter a new journal entry." style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;align=center;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="121" y="351" width="229" height="118" as="geometry" />
+        </mxCell>
+        <mxCell id="tPvOfe52DL4Rb17DQafK-5" value="&lt;b&gt;Journal Entries&amp;nbsp;&lt;/b&gt;subdomain" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=top;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="430" y="319" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="tPvOfe52DL4Rb17DQafK-6" value="2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="410" y="297" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tPvOfe52DL4Rb17DQafK-7" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="393.5" as="sourcePoint" />
+            <mxPoint x="420" y="393.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tPvOfe52DL4Rb17DQafK-8" value="The most recent journal entries are returned." style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;align=center;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="441" y="351" width="229" height="118" as="geometry" />
+        </mxCell>
+        <mxCell id="tPvOfe52DL4Rb17DQafK-9" value="&lt;b&gt;Episodes&amp;nbsp;&lt;/b&gt;subdomain" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;verticalAlign=top;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="750" y="319" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="tPvOfe52DL4Rb17DQafK-10" value="3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="730" y="297" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tPvOfe52DL4Rb17DQafK-11" value="The most recent episodes are returned." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;dashed=1;align=center;strokeColor=#d79b00;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="761" y="351" width="229" height="118" as="geometry" />
+        </mxCell>
+        <mxCell id="tPvOfe52DL4Rb17DQafK-12" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="700" y="393.5" as="sourcePoint" />
+            <mxPoint x="740" y="393.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-0" value="&lt;b&gt;Statistics&amp;nbsp;&lt;/b&gt;subdomain" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;verticalAlign=top;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="1080" y="319" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-1" value="4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="1060" y="297" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-2" value="Statistics about journal entries and episodes are returned." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;dashed=1;align=center;strokeColor=#9673a6;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="1091" y="351" width="229" height="118" as="geometry" />
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-3" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1030" y="393.5" as="sourcePoint" />
+            <mxPoint x="1070" y="393.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-4" value="&lt;b&gt;Application&amp;nbsp;&lt;/b&gt;subdomain" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;verticalAlign=top;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="1400" y="319" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-5" value="5" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="1380" y="297" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-6" value="The user types a new entry" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;align=center;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="1411" y="351" width="229" height="118" as="geometry" />
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-8" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1350" y="398.5" as="sourcePoint" />
+            <mxPoint x="1390" y="398.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-14" value="&lt;b&gt;Journal Entries&lt;/b&gt; subdomain" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;dashed=1;verticalAlign=top;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="1395" y="558" width="255" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-15" value="6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="1375" y="538" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-16" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1522" y="500" as="sourcePoint" />
+            <mxPoint x="1522" y="540" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-17" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1380" y="639.5" as="sourcePoint" />
+            <mxPoint x="1340" y="639.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-18" value="The new entry details are picked up processed." style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;align=center;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="1408" y="595" width="229" height="118" as="geometry" />
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-19" value="&lt;b&gt;Episodes&amp;nbsp;&lt;/b&gt;subdomain" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;verticalAlign=top;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="1080" y="560" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-20" value="7" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="1060" y="538" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-21" value="New journal entry details are processed to identify whether it is part of an existing or new dizziness episode." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;dashed=1;align=center;strokeColor=#d79b00;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="1091" y="592" width="229" height="118" as="geometry" />
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-24" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1052" y="639.5" as="sourcePoint" />
+            <mxPoint x="1012" y="639.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-25" value="&lt;b&gt;Statistics&amp;nbsp;&lt;/b&gt;subdomain" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;verticalAlign=top;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="752" y="560" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-26" value="8" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="732" y="538" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-27" value="New journal entry details are processed to identify whether it is part of an existing or new dizziness episode." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;dashed=1;align=center;strokeColor=#9673a6;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="763" y="592" width="229" height="118" as="geometry" />
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-29" value="&lt;b&gt;Application&amp;nbsp;&lt;/b&gt;subdomain" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;verticalAlign=top;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="430" y="560" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-30" value="9" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="410" y="538" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-31" value="The user is presented with an updated list of recent entries, episodes, and statistics, and a form to type a new entry." style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;align=center;" vertex="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry x="441" y="592" width="229" height="118" as="geometry" />
+        </mxCell>
+        <mxCell id="gNZtKktTJTQNf9mmZEp2-32" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" edge="1" parent="T1eXgJWzP-2BxgTHFj-d-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="730" y="639.5" as="sourcePoint" />
+            <mxPoint x="690" y="639.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

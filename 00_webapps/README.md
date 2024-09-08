@@ -9,6 +9,8 @@ To illustrate concepts about microservice architectures, API design and FastAPI 
 
 + **complex** &mdash; A *'MovieDB'* application that allows a user to record the movies and tv shows they've watched and get some statistics about them. This example opens up interesting capabilities such as scraping of information from movie sites to populate the information about the cast, exporting information to spreadsheets for review, etc.
 
+Along the way, certain webapp design and FastAPI concepts will be introduced in the context of the applications being developed.
+
 
 ## Step 1: Discovery phase: Description of the functionality
 
@@ -50,6 +52,20 @@ It's too early to do a thorough API specification at this stage, as we only have
 However, creating a small prototype of a portion of the application will give us some early hands-on experience, and will allow us unveil challenges we will have to solve on the subsequent phases.
 
 We can start by creating a simple application exposing a REST interface for some portion of the application, with some payload validation, and a fake data layer that we could directly use from the web layer.
+
+### A few words about FastAPI
+
+To build the prototype described above, that returns *canned* responses, and that will be used as the stepping stone that will let us implement additional capabilities we will use FastAPI.
+
+[FastAPI](https://github.com/tiangolo/fastapi) is a web application framework built on top of [Starlette](https://github.com/encode/starlette) &mdash; a high-performance, lightweight, async server gateway interface (ASGI).
+
+In addition, FastAPI relies on [pydantic](https://github.com/samuelcolvin/pydantic/) for data validation.
+
+![FastAPI - Starlette architecture](pics/fastapi-starlette.png)
+
+| NOTE: |
+| :---- |
+| As opposed to the Web Server Gateway Interface (WSGI), which is a Python standard specification to connect application code to servers in an sync fashion, ASGI does that asynchronously to foster concurrency. |
 
 ### Dizziness Tracker
 

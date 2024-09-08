@@ -1,6 +1,28 @@
 # Microservice concepts
 > microservices related concepts
 
+## High-Level application architecture
+
+A high-level application architecture enforces the boundaries and allows you to apply the principle of separation of concerns between the application layers.
+
+In a web application, you'll typically find:
++ The API layer
+
+    An adapter on top of the application logic that exposes the service's capabilities to its consumers.
+
++ The Business/Application logic layer
+
+    Implements the service's capabilities. It controls the interactions between the API layer and the Data layer.
+
+    This is the part that knows what to do to effectively carry out an action such as registering a new dizzines episode, or adding a new tv show you've recently watched. The API layer only exposes such capabilities, but doesn't know what the action really means.
+
++ The Data layer
+
+    Implements the data models required for interfacing with our sources of data and the persistence storage systems.
+
+![HL architecture](pics/hl-app-arch.png)
+
+
 ## Microservices design principles
 
 There are three fundamental microservices design principles:

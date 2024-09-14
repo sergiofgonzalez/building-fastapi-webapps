@@ -218,7 +218,7 @@ This approach follows the [JSON Patch](https://jsonpatch.com/). Simpler resource
 
 HTTP status codes are used to signal the result of processing an API request in the server.
 
-When used propertly, HTTP status code help us deliver expressive responses to our APIs' consumers.
+When used properly, HTTP status code help us deliver expressive responses to our APIs' consumers.
 
 HTTP status codes are organized into groups:
 
@@ -393,6 +393,10 @@ For example, when using the `GET /orders` endpoint, you may want to limit the re
 
 These sort of scenarios can be accomplished with URL query parameters.
 
+For example, in our `GET /orders` endpoint you can define:
++ `cancelled` &mdash; if not specified, all results will be returned. If specified and true, only cancelled orders will be retrieved. If specified and false, only not cancelled orders will be retrieved.
++ `limit` &mdash; specifies the max number of orders to be retrieved.
+
 URL query paramters should always be optional, and when appropriate, the server may assign default values for them (e.g., when paginating a large number of results, the server can decide to return only the first page even if the user has not send values for the pagination parameters).
 
 
@@ -407,3 +411,667 @@ For example, to obtain the first ten items of a large result set, you would send
 ```
 GET /orders?page=1&per_page=10
 ```
+
+## Using OpenAPI to document REST APIs
+
+OpenAPI is by far the most popular standard for describing RESTful APIs, with a rich ecosystem of tools for testing, validating, and visualizing APIs.
+
+OpenAPI uses JSON Schema to describe the API's structure and models.
+
+### Using JSON Schema to model data
+
+OpenAPI uses an extended subset of the JSON Schema specification for defining the API's structure and models.
+
+JSON Schema is a specification standard for defining the structure of a JSON document and the types and formats of its properties.
+
+Creating a JSON schema for interfaces that use JSON has two main purposes:
++ Document for the interfaces that use JSON to represent data.
++ Validate that the data being exchanged is correct.
+
+The following table describes a few JSON schema basic data types:
+
+| JSON Schema type | Description |
+| :--------------- | :---------- |
+| `string`  | character values |
+| `number`  | integer and decimal values |
+| `object`  | associative arrays (i.e., Python dicts) |
+| `array`   | collection of other data types (i.e., Python lists) |
+| `boolean` | for `true` and `false` values |
+| `null`    | for uninitialized data |
+
+As an example, the following snippet defines the JSON Schema document for an `order` object that features the properties `product`, `quantity`, and `size`:
+
+```json
+{
+    "order": {
+        "type": "object",
+        "properties": {
+            "product": {
+                "type": "string",
+            },
+            "quantity": {
+                "type": "number"
+            },
+            "size": {
+                "type": "string"
+            }
+        }
+    }
+}
+```
+
+And the following is a JSON document that complies with such specification:
+
+```json
+{
+    "order": {
+        "product": "margherita",
+        "quantity": 1,
+        "size", "big"
+    }
+}
+```
+
+The following snippet represents the JSON Schema document for an array of objects having `product`, `quantity`, and `size` properties:
+
+```json
+{
+    "order": {
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "product": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "number",
+                },
+                "size": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
+```
+
+An object can have any number of nested objects. However, when too many objects are nested, indentation makes the specification difficult to read. To mitigate this problem, JSON Schema allows you to define each object separately, and then use *JSON pointers* to reference them.
+
+The following snippet illustrates the use of JSON pointers to simplify the specification found above:
+
+```json
+{
+    "OrderItemSchema": {
+        "type": "object",
+        "properties": {
+            "product": {
+                "type": "string"
+            },
+            "quantity": {
+                "type": "number"
+            },
+            "size": {
+                "type": "string"
+            }
+        }
+    },
+    "Order": {
+        "order": {
+            "type": "array",
+            "items": {
+                "$ref": "#/OrderItemSchema"
+            }
+        }
+    }
+}
+```
+
+Note that the pointer uses JSONPath to identify the location of the referenced definition, with the root of the document represented by `#` and using `/` for navigation.
+
+For example, the JSONPath expression that refers to the `size` property of our document above will be: `#/OrderItemSchema/properties/size`.
+
+In addition to the type of the property, JSON Schema also allows you to specify the format of the property. For example, we could add a `created` property to identify when the order was created. Its JSON Schema snippet would be:
+
+```json
+{
+    "created": {
+        "type": "string",
+        "format": "date"
+    }
+}
+```
+
+| NOTE: |
+| :---- |
+| While the native language for JSON Schame is JSON, it's more practical for humans to use YAML, as it is less verbose and lets you use comments. |
+
+### Anatomy of an OpenAPI specification
+
+OpenAPI is a standard specification format for documenting RESTful APIs, that relies on JSON Schema for the request and response payload specification.
+
+An OpenAPI spec contains **everything** the consumer of the API needs to be able to interact with the API.
+
+The document itself features five sections:
+
+![OpenAPI spec sections](pics/openapi-sections.png)
+
+| Section | Description |
+| :------ | :---------- |
+| `openapi` | Indicates the version of OpenAPI the document conforms to. |
+| `info` | Contains general information such as the title and version of the API. |
+| `servers` | Contains a list of URLs where the API is available.<br>It is common to include the URLs for *production*, *staging*, *development*, etc. |
+| `paths` | Describes the endpoints exposed by the API, including information about the expected payloads, allowed path parameters, and the format of the responses.<br>This section represent the API interface, and it's the section that consumers will inspect to understand how to integrate with the API. |
+| `components` | Defines reusable elements that are referenced in other parts of the specification, such as schemas, parameters, security schemes, request bodies, and responses.<br>A schema is a definition of the expected attributes and types in your request and response objects. OpenAPI schemas are defined using JSON Schema syntax. |
+
+### The `paths` section: documenting the API endpoints
+
+The `paths` section of the OpenAPI schema spec document lists the URL paths exposed by the API, with the HTTP methods they implement, the types of requests they expect, and the responses they return, including the status codes.
+
+When writing this section, it is recommended to start with a textual representation of your endpoints and their responsibilities.
+
+The following table describes the endpoints of an ordering system:
+
+| Endpoint | Responsibility |
+| :------- | :------------- |
+| `GET /orders` | Retrieve a list of orders. |
+| `POST /orders` | Place an order. Requires a full representation of the order. |
+| `GET /orders/{order_id}` | Return an order. |
+| `PUT /orders/{order_id}` | Replace an order. Requires a full representation of the order. |
+| `DELETE /orders/{order_id}` | Delete an order. |
+| `POST /orders/{order_id}/cancel` | Cancel an order. |
+| `POST /orders/{order_id}/pay` | Pay an order. |
+
+Then, you can start creating the *skeleton* definition of the `paths` section using YAML. It is recommended to include an `operationId` property for each of the endpoints so that we can reference the operation in other sections of the document.
+
+```yaml
+paths:
+  /orders:
+    get:
+      operationId: getOrders
+    post:
+      operationId: createOrder
+
+  /orders/{order_id}:
+    get:
+      operationId: getOrder
+    put:
+      operationId: replaceOrder
+    delete:
+      operationId: deleteOrder
+
+  /orders/{order_id}/cancel:
+    post: cancelOrder
+
+  /orders/{order_id}/pay:
+    post: payOrder
+```
+
+With the *skeleton* in place, you can start detailing the parameters the endpoint accepts, the request payloads, query parameters, responses and their status codes, etc.
+
+#### Documenting URL query parameters
+
+It is common for endpoints returning a collection of resources to use URL query parameters to tailor the results it returns.
+
+Let's assume that we want the `GET /orders` endpoint described above to be able to filter orders using URL query parameters:
+
++ `cancelled`: specifies whether we want to filter the cancelled orders, so that only cancelled orders will be returned. This parameter will accept boolean values.
+
++ `limit`: specifies the max number of orders to be returned to the client. The value will be a number.
+
+Therefore, we want to support requests such as `GET /orders?cancelled=true&limit=5` to return the list of the five most recent orders that have been cancelled.
+
+```yaml
+paths:
+  /orders:
+    get:
+      operationId: getOrders
+      parameters:
+        - name: cancelled   # Parameter name
+          in: query         # URL query parameter
+          required: false   # Optional
+          schema:
+            type: boolean   # Boolean
+        - name: limit
+          in: query:
+          required: false
+          schema:
+            type: integer
+```
+
+#### Documenting URL path parameters
+
+Path parameters are common in the endpoint specification. Those are described in a `parameters` section that hangs directly from the path specification as seen below:
+
+
+```yaml
+paths:
+  /orders/{order_id}:
+    parameters:
+      - name: order_id    # Parameter name
+        in: path          # URL path parameter
+        required: true    # Mandatory
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getOrder
+    ...
+```
+
+
+#### Documenting request payloads
+
+When dealing with the specification of request payloads, you should start with an instance of the payload you want to model.
+
+For example, for our Order service could be:
+
+```json
+"order": [
+  {
+    "product": "margherita",
+    "size": "medium",
+    "quantity": 1
+  }
+]
+```
+
+We can then write a short textual representation describing each field:
+
+| Payload property | Description |
+| :--------------- | :---------- |
+| `product` | The type of product the user is ordering. |
+| `size` | The size of the product the user is ordering. It has to be one of: `small`, `medium`, `big`. |
+| `quantity` | The number of instances of the product the user is ordering. It can be any integer number equal to or greater than 1. |
+
+With all the required information in place, we can define the schem for this payload. This will be defined under the `content` property of the method's `requestBody` property.
+
+```yaml
+paths:
+  /orders:
+    get:
+      operationId: getOrders
+      parameters:
+        # ...URL query params spec...
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product:
+                        type: string
+                      size:
+                        type: string
+                        enum:
+                          - small
+                          - medium
+                          - big
+                      quantity:
+                        type: integer
+                        required: false
+                        default: 1
+                    required:
+                      - product
+                      - size
+```
+
+### The `components` section: refactoring schema definitions to avoid repetition
+
+While the previous snippet is valid, you can see that embedding payload schemas in the endpoint definition makes it very difficult to read.
+
+It is considered a good practice to refactor such schemas to keep the API spec clean and readable.
+
+The following snippet illustrates how to do so by leveraging the `components` section of the OpenAPI spec:
+
+```yaml
+paths:
+  /orders:
+    post:
+      operationId: createOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrderSchema" # JSON pointer
+components:
+  schemas:
+    CreateOrderSchema:
+      type: object
+      properties:
+        order:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+              size:
+                type: string
+                enum:
+                  - small
+                  - medium
+                  - big
+              quantity:
+                type: integer
+                required: false
+                default: 1
+            required:
+              - product
+              - size
+```
+
+This refactoring let us keep the `paths` section clean and focused on the higher-level details of the endpoint.
+
+Refactoring using JSON pointers can be taken a bit further. Our `CreateOrderSchema`contains an array of nested objects. It will be easier to understand and maintain if we keep them separate.
+
+```yaml
+components:
+  schemas:
+    OrderItemSchema:
+      type: object
+      properties:
+        product:
+          type: string
+        size:
+          type: string
+          enum:
+            - small
+            - medium
+            - big
+        quantity:
+          type: integer
+          required: false
+          default: 1
+      required:
+        - product
+        - size
+
+    CreateOrderSchema:
+      type: object
+      properties:
+        order:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItemSchema"
+```
+
+Now it has become easier to define the rest of the endpoints by referring to schemas already defined.
+
+For example, the following snippet illustrates the specification of the `PUT /orders/{order_id}`:
+
+```yaml
+paths:
+  /orders/{order_id}:
+    parameters:
+      - in: path
+        name: order_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    put:
+      operationId: replaceOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schema/CreateOrderSchema"
+```
+
+### Documenting API responses
+
+When documenting the responses in an OpenAPI spec document, it is recommended to start from a sample response payload:
+
+```json
+{
+  "id": "624f25f2-3d35-4cfc-b710-b64b2ed2942d",
+  "status": "delivered",
+  "created": "2024-09-10",
+  "order": [
+    {
+      "product": "margherita",
+      "size": "medium",
+      "quantity": 1,
+    },
+    {
+      "product": "gelato",
+      "size": "small",
+      "quantity": 2
+    }
+  ]
+}
+```
+
+Then, you have to create the corresponding schema definition within the `#/components/schema` section:
+
+```yaml
+components:
+  schema:
+    GetOrderSchema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+            - created
+            - paid
+            - progress
+            - cancelled
+            - dispatched
+            - delivered
+        created:
+          type: string
+          format: date-time
+        order:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItemSchema"
+```
+
+Note how we've used JSON pointers to reuse the definition of the items that are part of the `"order"` array.
+
+An alternative way of reusing schemas is to use a strategy called *model composition*, which allows you to combine the properties of different schemas into a single object definition.
+
+This is achieved using the keyword `allOf` to indicate that the object requires all the properties in the listed schemas.
+
+You can see the *model composition* technique in the following snippet:
+
+```yaml
+components:
+  schema:
+    GetOrderSchema:
+      allOf:
+        - $ref: "#/components/schemas/CreateOrderSchema"
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            status:
+              type: string
+              enum:
+                - created
+                - paid
+                - progress
+                - cancelled
+                - dispatched
+                - delivered
+            created
+              type: string
+              format: date-time
+```
+
+Because `CreateOrderSchema` already included the array information we need, we are only required to specify the added properties for the `GetOrderSchema`.
+
+| NOTE: |
+| :---- |
+| Model composition results in a cleaner and more succinct specification, but it requires the models to be created to be strictly compatible. If we look at the example above, if the definition of `CreateOrderSchema` was to be updated in the future, we would need to revert back to the previous approach, which will be additional work. |
+
+With the schema in place, we can then complete the `paths` specification, which will include the response's status code, content type, and schema:
+
+```yaml
+paths:
+  /orders/{order_id}:
+    parameters:
+      - in: path
+        name: order_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Return the details of a specific order
+      operationId: getOrder
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetOrderSchema"
+```
+
+### Creating generic responses
+
+APIs will feature also more generic responses, for example, when signaling an error to the API consumer.
+
+Such responses can also be modeled so that they are reused in different sections of the specification. You just need to define them in the `#/components/responses` subsection.
+
+For example, the following snippet illustrates how to model the *404 (Not Found)* using an `Error` schema:
+
+```yaml
+components:
+  responses:
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+        - detail
+```
+
+With the response information in place, you can start referring to it in the corresponding `paths` spec:
+
+```yaml
+paths:
+  /orders/{order_id}:
+    parameters:
+      - in: path
+        name: order_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Return the details of a specific order
+      operationId: getOrder
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetOrderSchema"
+        "404":
+          $ref: "#/components/responses/NotFound"
+```
+
+### Defining the authentication scheme of the API
+
+While we haven't discussed API security aspects yet, you are surely aware of the importance of how your APIs are protected.
+
+The API spec must describe how users need to authenticate and authorize their requests.
+
+The security related definitions go within the `#/components/securitySchemes` section.
+
+The following snippet illustrates how to configure three security schemes: one for OpenID Connect (OIDC), one for OAuth2, and another for bearer authorization.
+
+OIDC might be primarily used to authenticate *human* users through a frontend application, while for API integrations, OAuth2 is typically used. The bearer authorization is commonly used for point-to-point integration with our APIs (such as the ones a user operating a SPA will use):
+
+```yaml
+components:
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://<my-site>.com/known/open-id-configuration
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://<my-site>.com/oauth2/token
+          scopes: {}
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - oauth2:
+    - getOrders
+    - createOrder
+    - getOrder
+    - updateOrder
+    - deleteOrder
+    - payOrder
+    - cancelOrder
+  - bearerAuth:
+    - getOrders
+    - createOrder
+    - getOrder
+    - updateOrder
+    - deleteOrder
+    - payOrder
+    - cancelOrder
+```
+
+### Summary: manually writing OpenAPI spec to document your REST APIs
+
+Even when using a framework that doesn't require you to write an OpenAPI spec document (or that can even generate such document from your code, as FastAPI does), it's often recommended to manually write it, as it will give you and your API consumers some vital insights using standard documentation.
+
+When doing so, it is recommended to follow these steps:
+
+1. Get your APIs designed, as discussed in [REST APIs Design Principles](#rest-apis-design-principles) section.
+
+1. Create a YAML file with the five required OpenAPI spec sections:
+  - `openapi`: version of OpenAPI the document adheres to.
+  - `info`: general information about the API.
+  - `servers`: list of URLs where the API is available.
+  - `paths`: endpoints exposed by the API.
+  - `components`: reusable elements referenced in other sections.
+
+1. Populate the `openapi`, `info`, and `servers` sections.
+
+1. Create a table describing your endpoints, and use it as an input for populating the `paths` section. Include an `operationId` and `summary` for each endpoint.
+
+1. Document your query parameters (if needed).
+
+1. Document your path parameters.
+
+1. Describe your input payloads in the `components` section. Start by writing example input payloads and some textual information describing the shape of each element of the payload and use it as a guidance for writing the corresponding schemas in the aforementioned section. Reference the created schemas in the corresponding `path` section under the `requestBody` key.
+
+1. Describe your response payloads in the `components` section. Start by writing example output payloads. Reference those schemas in your corresponding endpoints documented in the `paths` section under the `responses` key. Each response should be prefixed by the corresponding HTTP status code.
+
+1. Create schemas for your generic response payloads (e.g., error messages) and complete the `paths` spec describing your non-success situations.
+
+1. Define the authentication scheme of the API in the `#/components/securitySchemes` section.

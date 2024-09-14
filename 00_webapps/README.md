@@ -221,3 +221,1330 @@ The microservices, along with certain technical details, associated with them wi
 + **Episodes** &mdash; A FastAPI microservice to manage episodes, which is a computed domain model concept not managed by the user. It will expose a read REST API to retrieve episodes and an operation to receive the notification that a new journal entry has been created.
 
 + **Statistics** &mdash; a FastAPI microservice to manage statistics about journal entries and episodes. It will expose a read REST API to get the latest statistics. Depending on the performance, it might need to own a piece of data with certain precomputed values.
+
+## Step 4: Writing the OpenAPI spec
+
+While FastAPI doesn't require you to manually write the OpenAPI spec, spending some time crafting the spec is a good exercise to get some introspection about the APIs you're creating.
+
+Thus, I will be following the steps described in [API: Concepts &raquo; Summary: manually writing OpenAPI spec](../01_api-concepts/README.md#summary-manually-writing-openapi-spec-to-document-your-rest-apis)
+
+
+### Dizziness Tracker: Writing the OpenAPI spec
+
+I will be writing the Journal Entries REST API and saving it in [oas.yaml](dizziness-tracker/04_dizziness-tracker_openapi-spec/oas.yaml).
+
+| NOTE: |
+| :---- |
+| As the OpenAPI spec was manually crafted, it might contain typos and incorrections. The idea of writing the spec is gain some understanding of the OpenAPI spec and the service API and its schemas. |
+
+#### Step 4.1: Get your API designed
+
+In the first step, you have to make sure you have your API designed according to the [REST API Design Principles](../01_api-concepts/README.md#rest-apis-design-principles).
+
+In particular we should make sure:
+  + we're using HTTP *the correct* way.
+  + we signal the result of the API call with the correct HTTP status code in case of success or error.
+  + Input API payloads are well designed.
+  + Error response payloads include an `"error"`, or `"detail"` key explaining why the client is getting an error.
+  + Response payloads are well designed.
+  + URL query parameters are used to filter collections.
+  + Pagination is used (if required).
+
+| NOTE: |
+| :---- |
+| All these aspects will be reflected in the OpenAPI spec. |
+
+#### Step 4.2: Create a YAML file with the OpenAPI required sections
+
+The first thing is creating an empty YAML file with the required `openapi`, `info`, `servers`, `paths`, and `components`.
+
+```yaml
+openapi:
+
+info:
+
+servers:
+
+paths:
+
+components:
+
+```
+
+#### Step 4.3: Populate the `openapi`, `info`, and `servers` sections
+
+In this step we add basic informational metadata about our API. Note that as we're not yet deploying anywhere, the `servers` section only describes how we can test in localhost:
+
+```yaml
+openapi: 3.1.0
+
+info:
+  title: Journal Entries API for the Dizziness Tracker
+  description: >
+    API that allows you to manage the Journal Entries
+    of the Dizziness Tracker app
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:5000
+    description: local development server
+
+paths:
+
+components:
+
+```
+
+#### Step 4.4: Initial population of the `paths` section
+
+In this step, we first create a table summarizing the API endpoints, which we'll use for start writing the `paths` section.
+
+Let's start with the table:
+
+| Endpoint | Responsibility |
+| :------- | :------------- |
+| `GET /entries` | Retrieve a list of journal entries. |
+| `POST /entries` | Create a journal entry. |
+| `GET /entries/{entry_id}` | Return a journal entry. |
+| `PUT /entries/{entry_id}` | Replace a journal entry. |
+| `PATCH /entries/{entry_id}` | Update a journal entry. |
+| `DELETE /entries/{entry_id}` | Delete a journal entry. |
+
+| NOTE: |
+| :---- |
+| Rows in the able are typically sorted by resource, as the OpenAPI spec follows the same sorting strategy. |
+
+Now we can start *transporting* the table information into the corresponding `paths` section. We will be adding only the `summary` and `operationId` for each endpoint.
+
+```yaml
+openapi: 3.1.0
+
+info:
+  title: Journal Entries API for the Dizziness Tracker
+  description: >
+    API that allows you to manage the Journal Entries
+    of the Dizziness Tracker app
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:5000
+    description: local development server
+
+paths:
+  /entries:
+    get:
+      summary: Retrieve a list of journal entries.
+      operationId: getEntries
+    post:
+      summary: Create a journal entry.
+      operationId: createEntry
+
+  /entries{entry_id}:
+    get:
+      summary: Return a journal entry.
+      operationId: getEntry
+    put:
+      summary: Replace a journal entry.
+      operationId: replaceEntry
+    patch:
+      summary: Update a journal entry.
+      operationId: updateEntry
+    delete:
+      summary: Delete a journal entry.
+      operationId: deleteEntry
+
+components:
+
+```
+
+#### Step 4.5: Document your URL query parameters
+
+In this step, we should enrich the `paths` section with all the query parameters our application supports.
+
+In our current version, we didn't define any such query parameter, but in the vision, we have foreseen that we would want to filter the results &mdash; URL query parameters will be really helpful there.
+
+Let's assume that we want to filter the journal entries:
++ limiting the number of journal entries that we return. The UI will probably only list the latest 10-15 entries, so it will be helpful to include a `limit` URL query parameter in our API.
+
++ returning only the journal entries of the current episode. This will be helpful to manage the most recent set of journal entries, and help the user track the dizziness episode at it is happening. A `open` URL query allowing a boolean value will let the system know that it should return only the journal entries that are associated to an open episode.
+
+Thus, let's include those in our OpenAPI spec file:
+
+```yaml
+openapi: 3.1.0
+
+info:
+  title: Journal Entries API for the Dizziness Tracker
+  description: >
+    API that allows you to manage the Journal Entries
+    of the Dizziness Tracker app
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:5000
+    description: local development server
+
+paths:
+  /entries:
+    get:
+      summary: Retrieve a list of journal entries.
+      description: >
+        Returns the list of journal entries sorted by date in descending order
+        (most recent first). It allows retrieving only a given number of
+        entries, and getting only the ones associated to an open episode.
+      operationId: getEntries
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: open
+          in: query
+          required: false
+          schema:
+            type: boolean
+    post:
+      summary: Create a journal entry.
+      operationId: createEntry
+
+  /entries{entry_id}:
+    get:
+      summary: Return a journal entry.
+      operationId: getEntry
+    put:
+      summary: Replace a journal entry.
+      operationId: replaceEntry
+    patch:
+      summary: Update a journal entry.
+      operationId: updateEntry
+    delete:
+      summary: Delete a journal entry.
+      operationId: deleteEntry
+
+components:
+
+```
+
+Note that we have added a `description` that goes along with the summary, to describe the capabilities of the endpoint.
+
+#### Step 4.6: Document your URL path parameters
+
+Now, we update our `path` section by adding information about the path parameters. In our case, we only have the `entra_id` parameter, which we will have to include accordingly.
+
+```yaml
+openapi: 3.1.0
+
+info:
+  title: Journal Entries API for the Dizziness Tracker
+  description: >
+    API that allows you to manage the Journal Entries
+    of the Dizziness Tracker app
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:5000
+    description: local development server
+
+paths:
+  /entries:
+    get:
+      summary: Retrieve a list of journal entries.
+      description: >
+        Returns the list of journal entries sorted by date in descending order
+        (most recent first). It allows retrieving only a given number of
+        entries, and getting only the ones associated to an open episode.
+      operationId: getEntries
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: open
+          in: query
+          required: false
+          schema:
+            type: boolean
+    post:
+      summary: Create a journal entry.
+      operationId: createEntry
+
+  /entries{entry_id}:
+    parameters:
+      - in: paths
+        name: entry_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Return a journal entry.
+      operationId: getEntry
+    put:
+      summary: Replace a journal entry.
+      operationId: replaceEntry
+    patch:
+      summary: Update a journal entry.
+      operationId: updateEntry
+    delete:
+      summary: Delete a journal entry.
+      operationId: deleteEntry
+
+components:
+
+```
+
+#### Step 4.7: Document your input payloads
+
+In this section we will add content to the `components` section of the OpenAPI spec document. We will start by describing the different input payloads, and using them as input for the corresponding sections.
+
+Let's start with the `POST /entries` section. An example payload and the corressponding accompanying element description will look like:
+
+```json
+{
+  "day":"2024-09-07",
+  "level":"level_0_not_dizzy",
+  "remarks":"feeling OK"
+}
+```
+
+| Payload property | Description |
+| :--------------- | :---------- |
+| `day` | The day the journal entry refers to in the format "YYYY-MM-DD". |
+| `level` | The degree of dizziness the user feels. It has to be one of: `level_0_not_dizzy`, `level_1_slightly_dizzy`, `level_2_dizzy`, `level_3_quite_dizzy`, `level_4_very_dizzy`, `level_5_super_dizzy`. |
+| `remarks` | Free text in which the user annotates the journal entry. It is optional, but if present, it must not be null. If not provided, "" (empty string) will be assumed. |
+
+Note that even for this very simple case the table provides a very detailed description of the payload properties.
+
+With this information in place, we can create the corresponding information in the `components` section.
+
+```yaml
+openapi: 3.1.0
+
+info:
+  title: Journal Entries API for the Dizziness Tracker
+  description: >
+    API that allows you to manage the Journal Entries
+    of the Dizziness Tracker app
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:5000
+    description: local development server
+
+paths:
+  /entries:
+    get:
+      summary: Retrieve a list of journal entries.
+      description: >
+        Returns the list of journal entries sorted by date in descending order
+        (most recent first). It allows retrieving only a given number of
+        entries, and getting only the ones associated to an open episode.
+      operationId: getEntries
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: open
+          in: query
+          required: false
+          schema:
+            type: boolean
+    post:
+      summary: Create a journal entry.
+      operationId: createEntry
+
+  /entries{entry_id}:
+    parameters:
+      - in: paths
+        name: entry_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Return a journal entry.
+      operationId: getEntry
+    put:
+      summary: Replace a journal entry.
+      operationId: replaceEntry
+    patch:
+      summary: Update a journal entry.
+      operationId: updateEntry
+    delete:
+      summary: Delete a journal entry.
+      operationId: deleteEntry
+
+components:
+  schemas:
+    CreateJournalEntrySchema:
+      type: object
+      properties:
+        day:
+          type: string
+          format: date
+        level:
+          type: string
+          enum:
+            - level_0_not_dizzy
+            - level_1_slightly_dizzy
+            - level_2_dizzy
+            - level_3_quite_dizzy
+            - level_4_very_dizzy
+            - level_5_super_dizzy
+        remarks:
+          type: string
+          default: ""
+      required:
+        - day
+        - level
+
+```
+
+Now we repeat the process for the remaining input payloads:
+
++ The `PUT /entries/{entry_id}` will reuse the same `CreateJournalEntrySchema`.
+
+For the `PATCH /entries/{entry_id}`:
+
+```json
+{
+  "day": "2024-09-11"
+}
+```
+
+| Payload property | Description |
+| :--------------- | :---------- |
+| `day` | The day the journal entry refers to in the format "YYYY-MM-DD". Optional. |
+| `level` | The degree of dizziness the user feels. It has to be one of: `level_0_not_dizzy`, `level_1_slightly_dizzy`, `level_2_dizzy`, `level_3_quite_dizzy`, `level_4_very_dizzy`, `level_5_super_dizzy`. Optional. |
+| `remarks` | Free text in which the user annotates the journal entry. It is optional, but if present, it must not be null. If not provided, "" (empty string) will be assumed. |
+
+We see that we have the same fields as in the `CreateJournalEntry`, the difference being that now all the fields are optional, as the `PATCH` operation allows for sending only certain items.
+
+| NOTE: |
+| :---- |
+| In more complicated scenarios, we should rely on JSON Patch to apply such changes. In this very simple example, this payload with all the optional fields, or a simple dictionary will suffice. |
+
+Because the fields are the same, we can reference the recently updated properties:
+
+```yaml
+openapi: 3.1.0
+
+info:
+  title: Journal Entries API for the Dizziness Tracker
+  description: >
+    API that allows you to manage the Journal Entries
+    of the Dizziness Tracker app
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:5000
+    description: local development server
+
+paths:
+  /entries:
+    get:
+      summary: Retrieve a list of journal entries.
+      description: >
+        Returns the list of journal entries sorted by date in descending order
+        (most recent first). It allows retrieving only a given number of
+        entries, and getting only the ones associated to an open episode.
+      operationId: getEntries
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: open
+          in: query
+          required: false
+          schema:
+            type: boolean
+    post:
+      summary: Create a journal entry.
+      operationId: createEntry
+
+  /entries{entry_id}:
+    parameters:
+      - in: paths
+        name: entry_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Return a journal entry.
+      operationId: getEntry
+    put:
+      summary: Replace a journal entry.
+      operationId: replaceEntry
+    patch:
+      summary: Update a journal entry.
+      operationId: updateEntry
+    delete:
+      summary: Delete a journal entry.
+      operationId: deleteEntry
+
+components:
+  schemas:
+    CreateJournalEntrySchema:
+      type: object
+      properties:
+        day:
+          type: string
+          format: date
+        level:
+          type: string
+          enum:
+            - level_0_not_dizzy
+            - level_1_slightly_dizzy
+            - level_2_dizzy
+            - level_3_quite_dizzy
+            - level_4_very_dizzy
+            - level_5_super_dizzy
+        remarks:
+          type: string
+          default: ""
+      required:
+        - day
+        - level
+
+    UpdateJournalEntrySchema:
+      type: object
+      properties:
+        $ref: "/components/schemas/CreateJournalEntry/properties"
+```
+
+With the input payloads defined, we just need to identify them in the corresponding endpoints in the `paths` section:
+
+```yaml
+openapi: 3.1.0
+
+info:
+  title: Journal Entries API for the Dizziness Tracker
+  description: >
+    API that allows you to manage the Journal Entries
+    of the Dizziness Tracker app
+  version: 0.1.0
+
+servers:
+
+paths:
+  /entries:
+    get:
+      summary: Retrieve a list of journal entries.
+      description: >
+        Returns the list of journal entries sorted by date in descending order
+        (most recent first). It allows retrieving only a given number of
+        entries, and getting only the ones associated to an open episode.
+      operationId: getEntries
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: open
+          in: query
+          required: false
+          schema:
+            type: boolean
+    post:
+      summary: Create a journal entry.
+      operationId: createEntry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateJournalEntrySchema"
+
+  /entries{entry_id}:
+    parameters:
+      - in: paths
+        name: entry_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Return a journal entry.
+      operationId: getEntry
+    put:
+      summary: Replace a journal entry.
+      operationId: replaceEntry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "/components/schemas/CreateJournalEntry"
+    patch:
+      summary: Update a journal entry.
+      operationId: updateEntry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateJournalEntrySchema"
+    delete:
+      summary: Delete a journal entry.
+      operationId: deleteEntry
+
+components:
+  schemas:
+    CreateJournalEntrySchema:
+      type: object
+      properties:
+        day:
+          type: string
+          format: date
+        level:
+          type: string
+          enum:
+            - level_0_not_dizzy
+            - level_1_slightly_dizzy
+            - level_2_dizzy
+            - level_3_quite_dizzy
+            - level_4_very_dizzy
+            - level_5_super_dizzy
+        remarks:
+          type: string
+          default: ""
+      required:
+        - day
+        - level
+
+    UpdateJournalEntrySchema:
+      type: object
+      properties:
+        $ref: "/components/schemas/CreateJournalEntry/properties"
+
+```
+
+#### Step 4.8: Documenting your response payloads
+
+In this section we start by updating the components section writing the response schemas.
+
+We follow the same approach we used with the input payloads, using sample response payloads that we translate into the corresponding `#/components/schemas/` snippets:
+
+Let's start with the `GetJournalEntriesSchema`, which is the reponse payload for the `GET /entries` endpoint:
+
+```json
+{
+    "entries": [
+        {
+            "day": "2024-07-01",
+            "id": "4eb3009f-1411-46a4-b499-a6e653583ac3",
+            "level": "level_0_not_dizzy",
+            "remarks": "yay!",
+            "symptoms": [
+                {
+                    "desc": "No symptoms, as before or after having an episode",
+                    "id": "f73b0e80-66bb-4270-b48b-4cae304cc567"
+                },
+                {
+                    "desc": "Fully functional",
+                    "id": "c505d1cb-98d3-4fdb-9144-6bbaf1c84aca"
+                }
+            ]
+        },
+        {
+            "day": "2024-07-05",
+            "id": "2905d65b-8164-48d6-a195-77ce3581977d",
+            "level": "level_1_slightly_dizzy",
+            "remarks": "sneezed yesterday",
+            "symptoms": [
+                {
+                    "desc": "A little light-headed",
+                    "id": "1b19854f-21ee-455a-a5e5-cf85feaf2ba1"
+                },
+                {
+                    "desc": "Ear ringing",
+                    "id": "95a1a642-75b1-4430-9365-f40a5780a5c2"
+                },
+                {
+                    "desc": "Can work, jog, walk, and eat without issues",
+                    "id": "b09ed7d5-f332-4861-88ec-5a4cb2b88ae4"
+                },
+                {
+                    "desc": "Still functional.",
+                    "id": "50f942ae-3a7f-435d-9aad-0b7375e0e45d"
+                }
+            ]
+        }
+    ]
+}
+```
+
+This response payload gives us some opportunities to plan for reusability. For example, We can define our `SymptomSchema` and our `GetJournalEntrySchema`, and then, make `GetJournalEntriesSchema` an array of `GetJournalEntrySchema` which in turn, contain an array of `SymptomSchema` items.
+
+We're proficient enough in OpenAPI spec to tackle this in one shot:
+
+```yaml
+openapi: 3.1.0
+
+info:
+  title: Journal Entries API for the Dizziness Tracker
+  description: >
+    API that allows you to manage the Journal Entries
+    of the Dizziness Tracker app
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:5000
+    description: local development server
+
+paths:
+  /entries:
+    get:
+      summary: Retrieve a list of journal entries.
+      description: >
+        Returns the list of journal entries sorted by date in descending order
+        (most recent first). It allows retrieving only a given number of
+        entries, and getting only the ones associated to an open episode.
+      operationId: getEntries
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: open
+          in: query
+          required: false
+          schema:
+            type: boolean
+    post:
+      summary: Create a journal entry.
+      operationId: createEntry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateJournalEntrySchema"
+
+  /entries{entry_id}:
+    parameters:
+      - in: paths
+        name: entry_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Return a journal entry.
+      operationId: getEntry
+    put:
+      summary: Replace a journal entry.
+      operationId: replaceEntry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "/components/schemas/CreateJournalEntry"
+    patch:
+      summary: Update a journal entry.
+      operationId: updateEntry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateJournalEntrySchema"
+    delete:
+      summary: Delete a journal entry.
+      operationId: deleteEntry
+
+components:
+  schemas:
+    CreateJournalEntrySchema:
+      type: object
+      properties:
+        day:
+          type: string
+          format: date
+        level:
+          type: string
+          enum:
+            - level_0_not_dizzy
+            - level_1_slightly_dizzy
+            - level_2_dizzy
+            - level_3_quite_dizzy
+            - level_4_very_dizzy
+            - level_5_super_dizzy
+        remarks:
+          type: string
+          default: ""
+      required:
+        - day
+        - level
+
+    UpdateJournalEntrySchema:
+      type: object
+      properties:
+        $ref: "/components/schemas/CreateJournalEntry/properties"
+
+    SymptomSchema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        desc:
+          type: string
+
+    GetJournalEntrySchema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        day:
+          type: string
+          format: date
+        level:
+          type: string
+          enum:
+            - level_0_not_dizzy
+            - level_1_slightly_dizzy
+            - level_2_dizzy
+            - level_3_quite_dizzy
+            - level_4_very_dizzy
+            - level_5_super_dizzy
+        remarks:
+          type: string
+        symptoms:
+          type: array
+          items:
+            $ref: "#/components/schema/SymptomSchema"
+
+    GetJournalEntriesSchema:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schema/GetJournalEntrySchema"
+```
+
+These are all the schemas we need to write, as all the endpoints return either "No Content", `GetJournalEntrySchema`, or `GetJournalEntriesSchema`.
+
+Now we need to *wire them* in the `responses` section under of the `paths` section.
+
+To do so, it is recommended to have a table showing the successful status code of each endpoint:
+
+| Endpoint | Responsibility | HTTP Status Code (Success) |
+| :------- | :------------- | :------------------------- |
+| `GET /entries` | Retrieve a list of journal entries. | 200 (OK) |
+| `POST /entries` | Create a journal entry. | 201 (Created) |
+| `GET /entries/{entry_id}` | Return a journal entry. | 200 (OK) |
+| `PUT /entries/{entry_id}` | Replace a journal entry. | 200 (OK) |
+| `PATCH /entries/{entry_id}` | Update a journal entry. | 200 (OK) |
+| `DELETE /entries/{entry_id}` | Delete a journal entry. | 204 (No Content) |
+
+This give us the following OpenAPI spec:
+
+```yaml
+openapi: 3.1.0
+
+info:
+  title: Journal Entries API for the Dizziness Tracker
+  description: >
+    API that allows you to manage the Journal Entries
+    of the Dizziness Tracker app
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:5000
+    description: local development server
+
+paths:
+  /entries:
+    get:
+      summary: Retrieve a list of journal entries.
+      description: >
+        Returns the list of journal entries sorted by date in descending order
+        (most recent first). It allows retrieving only a given number of
+        entries, and getting only the ones associated to an open episode.
+      operationId: getEntries
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: open
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: An array of journal entries.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schema/GetJournalEntriesSchema"
+
+    post:
+      summary: Create a journal entry.
+      operationId: createEntry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateJournalEntrySchema"
+      responses:
+        "201":
+          description: A full representation of the created journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetJournalEntrySchema"
+
+  /entries{entry_id}:
+    parameters:
+      - in: paths
+        name: entry_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Return a journal entry.
+      operationId: getEntry
+      responses:
+        "200":
+          description: A full representation of the journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetJournalEntrySchema"
+    put:
+      summary: Replace a journal entry.
+      operationId: replaceEntry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "/components/schemas/CreateJournalEntry"
+      responses:
+        "200":
+          description: A full representation of the journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetJournalEntrySchema"
+    patch:
+      summary: Update a journal entry.
+      operationId: updateEntry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateJournalEntrySchema"
+      responses:
+        "200":
+          description: A full representation of the journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetJournalEntrySchema"
+    delete:
+      summary: Delete a journal entry.
+      operationId: deleteEntry
+
+components:
+  schemas:
+    CreateJournalEntrySchema:
+      type: object
+      properties:
+        day:
+          type: string
+          format: date
+        level:
+          type: string
+          enum:
+            - level_0_not_dizzy
+            - level_1_slightly_dizzy
+            - level_2_dizzy
+            - level_3_quite_dizzy
+            - level_4_very_dizzy
+            - level_5_super_dizzy
+        remarks:
+          type: string
+          default: ""
+      required:
+        - day
+        - level
+
+    UpdateJournalEntrySchema:
+      type: object
+      properties:
+        $ref: "/components/schemas/CreateJournalEntry/properties"
+
+    SymptomSchema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        desc:
+          type: string
+
+    GetJournalEntrySchema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        day:
+          type: string
+          format: date
+        level:
+          type: string
+          enum:
+            - level_0_not_dizzy
+            - level_1_slightly_dizzy
+            - level_2_dizzy
+            - level_3_quite_dizzy
+            - level_4_very_dizzy
+            - level_5_super_dizzy
+        remarks:
+          type: string
+        symptoms:
+          type: array
+          items:
+            $ref: "#/components/schema/SymptomSchema"
+
+    GetJournalEntriesSchema:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schema/GetJournalEntrySchema"
+
+```
+
+#### Step 4.9: Documenting your generic response payloads
+
+In this step, we create schemas for the generic response payloads (such as the ones we use in error situations). Note that this type of generic response schemas are defined in the `#/components/schemas` section, but then the error situation itself is described in the `#/components/responses` section, and then wired in the `#/paths/responses` (see listing below).
+
+As always, we start by defining the schemas of the error response, using a sample error response as a template:
+
+```json
+{
+    "detail": "Not Found"
+}
+```
+
+And another a bit more complicated:
+
+```json
+{
+    "detail": [
+        {
+            "input": {
+                "name": "sergio"
+            },
+            "loc": [
+                "body",
+                "day"
+            ],
+            "msg": "Field required",
+            "type": "missing"
+        },
+        {
+            "input": {
+                "name": "sergio"
+            },
+            "loc": [
+                "body",
+                "level"
+            ],
+            "msg": "Field required",
+            "type": "missing"
+        }
+    ]
+}
+```
+
+As the errors are sometimes controlled by the frameworks we use, we should be quite pragmatic when defining the schema, so we could use:
+
+```yaml
+    Error:
+      type: object
+      properties:
+        detail:
+          oneOf:
+            - type: string
+            - type: array
+      required:
+        - detail
+```
+
+See how the array definition does not specify the shape of the elements, and that we allow for simple string messages.
+
+```yaml
+openapi: 3.1.0
+
+info:
+  title: Journal Entries API for the Dizziness Tracker
+  description: >
+    API that allows you to manage the Journal Entries
+    of the Dizziness Tracker app
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:5000
+    description: local development server
+
+paths:
+  /entries:
+    get:
+      summary: Retrieve a list of journal entries.
+      description: >
+        Returns the list of journal entries sorted by date in descending order
+        (most recent first). It allows retrieving only a given number of
+        entries, and getting only the ones associated to an open episode.
+      operationId: getEntries
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: open
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: An array of journal entries.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schema/GetJournalEntriesSchema"
+
+    post:
+      summary: Create a journal entry.
+      operationId: createEntry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateJournalEntrySchema"
+      responses:
+        "201":
+          description: A full representation of the created journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetJournalEntrySchema"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /entries{entry_id}:
+    parameters:
+      - in: paths
+        name: entry_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Return a journal entry.
+      operationId: getEntry
+      responses:
+        "200":
+          description: A full representation of the journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetJournalEntrySchema"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    put:
+      summary: Replace a journal entry.
+      operationId: replaceEntry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "/components/schemas/CreateJournalEntry"
+      responses:
+        "200":
+          description: A full representation of the journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetJournalEntrySchema"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    patch:
+      summary: Update a journal entry.
+      operationId: updateEntry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateJournalEntrySchema"
+      responses:
+        "200":
+          description: A full representation of the journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetJournalEntrySchema"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    delete:
+      summary: Delete a journal entry.
+      operationId: deleteEntry
+
+components:
+  responses:
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    UnprocessableEntity:
+      description: They payload contains invalid values.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        detail:
+          oneOf:
+            - type: string
+            - type: array
+      required:
+        - detail
+
+    CreateJournalEntrySchema:
+      type: object
+      properties:
+        day:
+          type: string
+          format: date
+        level:
+          type: string
+          enum:
+            - level_0_not_dizzy
+            - level_1_slightly_dizzy
+            - level_2_dizzy
+            - level_3_quite_dizzy
+            - level_4_very_dizzy
+            - level_5_super_dizzy
+        remarks:
+          type: string
+          default: ""
+      required:
+        - day
+        - level
+
+    UpdateJournalEntrySchema:
+      type: object
+      properties:
+        $ref: "/components/schemas/CreateJournalEntry/properties"
+
+    SymptomSchema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        desc:
+          type: string
+
+    GetJournalEntrySchema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        day:
+          type: string
+          format: date
+        level:
+          type: string
+          enum:
+            - level_0_not_dizzy
+            - level_1_slightly_dizzy
+            - level_2_dizzy
+            - level_3_quite_dizzy
+            - level_4_very_dizzy
+            - level_5_super_dizzy
+        remarks:
+          type: string
+        symptoms:
+          type: array
+          items:
+            $ref: "#/components/schema/SymptomSchema"
+
+    GetJournalEntriesSchema:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schema/GetJournalEntrySchema"
+
+```
+
+As we don't have secured our API yet, this is the final step so far.
+
+## Step 5: Implementing URL query parameters
+
+Writing the OpenAPI spec might have given you an opportunity to discover certain functionalities on existing endpoints that you'd like to implement using URL query parameters.
+
+URL query parameters are key-value pairs that you encode in the URL to send additional information.
+
+Query parameters come after a question mark `?`. You can combine multiple query parameters by separating them with ampersands `&`.
+
+It's a best practice for endpoints returning a collection of resources to allow users to filter and paginate the results.
+
+FastAPI makes it really easy to work with URL query parameters, as you simply need to add them to your function signature:
+
+```python
+@app.get("/hi")
+def greet(who: str):
+  if not who:
+    who = "stranger"
+  return f"Hello, {who}"
+```
+
+### Dizziness Tracker: Adding query parameters
+
+While writing the OpenAPI spec we identified that the `GET /entries` endpoint could be enhanced with a couple of optional parameters:
++ limit &mdash; return the maximum number of entries to be retrieved.
++ open &mdash; if true, will only return the journal entries not associated to a given episode.

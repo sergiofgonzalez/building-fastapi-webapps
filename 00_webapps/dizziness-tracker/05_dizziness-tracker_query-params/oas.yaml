@@ -1,0 +1,254 @@
+openapi: 3.1.0
+
+info:
+  title: Journal Entries API for the Dizziness Tracker
+  description: >
+    API that allows you to manage the Journal Entries
+    of the Dizziness Tracker app
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:5000
+    description: local development server
+
+paths:
+  /entries:
+    get:
+      summary: Retrieve a list of journal entries.
+      description: >
+        Returns the list of journal entries sorted by date in descending order
+        (most recent first). It allows retrieving only a given number of
+        entries, and getting only the ones associated to an open episode.
+      operationId: getEntries
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: open
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: An array of journal entries.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schema/GetJournalEntriesSchema"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+    post:
+      summary: Create a journal entry.
+      operationId: createEntry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateJournalEntrySchema"
+      responses:
+        "201":
+          description: A full representation of the created journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetJournalEntrySchema"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /entries{entry_id}:
+    parameters:
+      - in: paths
+        name: entry_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Return a journal entry.
+      operationId: getEntry
+      responses:
+        "200":
+          description: A full representation of the journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetJournalEntrySchema"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    put:
+      summary: Replace a journal entry.
+      operationId: replaceEntry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "/components/schemas/CreateJournalEntry"
+      responses:
+        "200":
+          description: A full representation of the journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetJournalEntrySchema"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    patch:
+      summary: Update a journal entry.
+      operationId: updateEntry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateJournalEntrySchema"
+      responses:
+        "200":
+          description: A full representation of the journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetJournalEntrySchema"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    delete:
+      summary: Delete a journal entry.
+      operationId: deleteEntry
+
+components:
+  responses:
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    UnprocessableEntity:
+      description: They payload contains invalid values.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        detail:
+          oneOf:
+            - type: string
+            - type: array
+      required:
+        - detail
+
+    SymptomSchema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        desc:
+          type: string
+
+    CreateJournalEntrySchema:
+      type: object
+      properties:
+        day:
+          type: string
+          format: date
+        level:
+          type: string
+          enum:
+            - level_0_not_dizzy
+            - level_1_slightly_dizzy
+            - level_2_dizzy
+            - level_3_quite_dizzy
+            - level_4_very_dizzy
+            - level_5_super_dizzy
+        remarks:
+          type: string
+          default: ""
+      required:
+        - day
+        - level
+
+    ReplaceJournalEntrySchema:
+      allOf:
+        - $ref: "/components/schemas/CreateJournalEntry"
+        - type: object
+          properties:
+            episode_id:
+              type: string
+              format: uuid
+
+    GetJournalEntrySchema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        day:
+          type: string
+          format: date
+        level:
+          type: string
+          enum:
+            - level_0_not_dizzy
+            - level_1_slightly_dizzy
+            - level_2_dizzy
+            - level_3_quite_dizzy
+            - level_4_very_dizzy
+            - level_5_super_dizzy
+        remarks:
+          type: string
+        symptoms:
+          type: array
+          items:
+            $ref: "#/components/schema/SymptomSchema"
+        episode_id:
+          type: string
+          format: uuid
+
+    UpdateJournalEntrySchema:
+      type: object
+      properties:
+        allOf:
+          - $ref: "/components/schemas/CreateJournalEntry/properties"
+          - type: object
+            properties:
+              episode_id:
+                type: string
+                format: uuid
+
+    GetJournalEntriesSchema:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schema/GetJournalEntrySchema"
+
+    GetEpisodeSchema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        is_open:
+          type: boolean
+        entries:
+          type: array
+          items:
+            type: string
+            format: uuid

@@ -19,3 +19,9 @@ Then you can run the project doing:
 ```bash
 $ uv run
 ```
+
+To add the dependency to FastAPI type:
+
+```bash
+uv add fastapi --extra standard
+```

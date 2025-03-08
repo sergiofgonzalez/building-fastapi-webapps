@@ -1,0 +1,17 @@
+[project]
+name = "09-dizziness-tracker-entries-hexagonal-arch"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["fastapi[standard]>=0.115.2", "sqlalchemy>=2.0.36"]
+
+[tool.ruff]
+# Set the maximum line length to 80
+line-length = 80
+
+[tool.ruff.lint]
+ignore = [
+    "PLR0913", # Allow more than 5 args in functions
+]
+select = ["ALL"]

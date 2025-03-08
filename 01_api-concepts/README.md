@@ -919,6 +919,33 @@ Because `CreateOrderSchema` already included the array information we need, we a
 | :---- |
 | Model composition results in a cleaner and more succinct specification, but it requires the models to be created to be strictly compatible. If we look at the example above, if the definition of `CreateOrderSchema` was to be updated in the future, we would need to revert back to the previous approach, which will be additional work. |
 
+#### Preventing unknown fields in your payload
+
+In general, it is considered a good practice to force a validation error when a payload includes fields that haven't been defined in your schemas.
+
+This can be stated by including the property `additionalProperties` of your schemas set to `false`:
+
+```yaml
+OrderItemSchema:
+  type: object
+  properties:
+    product:
+      type: string
+    size:
+      type: string
+      enum:
+        - small
+        - medium
+        - large
+  required:
+    - product
+    - size
+    - quantity
+  additionalProperties: false
+```
+
+#### Referencing your schemas in the `paths` section
+
 With the schema in place, we can then complete the `paths` specification, which will include the response's status code, content type, and schema:
 
 ```yaml

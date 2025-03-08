@@ -339,7 +339,7 @@ paths:
       summary: Create a journal entry.
       operationId: createEntry
 
-  /entries{entry_id}:
+  /entries/{entry_id}:
     get:
       summary: Return a journal entry.
       operationId: getEntry
@@ -408,7 +408,7 @@ paths:
       summary: Create a journal entry.
       operationId: createEntry
 
-  /entries{entry_id}:
+  /entries/{entry_id}:
     get:
       summary: Return a journal entry.
       operationId: getEntry
@@ -470,9 +470,9 @@ paths:
       summary: Create a journal entry.
       operationId: createEntry
 
-  /entries{entry_id}:
+  /entries/{entry_id}:
     parameters:
-      - in: paths
+      - in: path
         name: entry_id
         required: true
         schema:
@@ -557,9 +557,9 @@ paths:
       summary: Create a journal entry.
       operationId: createEntry
 
-  /entries{entry_id}:
+  /entries/{entry_id}:
     parameters:
-      - in: paths
+      - in: path
         name: entry_id
         required: true
         schema:
@@ -668,9 +668,9 @@ paths:
       summary: Create a journal entry.
       operationId: createEntry
 
-  /entries{entry_id}:
+  /entries/{entry_id}:
     parameters:
-      - in: paths
+      - in: path
         name: entry_id
         required: true
         schema:
@@ -763,9 +763,9 @@ paths:
             schema:
               $ref: "#/components/schemas/CreateJournalEntrySchema"
 
-  /entries{entry_id}:
+  /entries/{entry_id}:
     parameters:
-      - in: paths
+      - in: path
         name: entry_id
         required: true
         schema:
@@ -782,7 +782,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "/components/schemas/CreateJournalEntry"
+              $ref: "#/components/schemas/CreateJournalEntrySchema"
     patch:
       summary: Update a journal entry.
       operationId: updateEntry
@@ -930,9 +930,9 @@ paths:
             schema:
               $ref: "#/components/schemas/CreateJournalEntrySchema"
 
-  /entries{entry_id}:
+  /entries/{entry_id}:
     parameters:
-      - in: paths
+      - in: path
         name: entry_id
         required: true
         schema:
@@ -949,7 +949,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "/components/schemas/CreateJournalEntry"
+              $ref: "#/components/schemas/CreateJournalEntrySchema"
     patch:
       summary: Update a journal entry.
       operationId: updateEntry
@@ -1024,7 +1024,7 @@ components:
         symptoms:
           type: array
           items:
-            $ref: "#/components/schema/SymptomSchema"
+            $ref: "#/components/schemas/SymptomSchema"
 
     GetJournalEntriesSchema:
       type: object
@@ -1032,7 +1032,7 @@ components:
         entries:
           type: array
           items:
-            $ref: "#/components/schema/GetJournalEntrySchema"
+            $ref: "#/components/schemas/GetJournalEntrySchema"
 ```
 
 These are all the schemas we need to write, as all the endpoints return either "No Content", `GetJournalEntrySchema`, or `GetJournalEntriesSchema`.
@@ -1092,7 +1092,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schema/GetJournalEntriesSchema"
+                $ref: "#/components/schemas/GetJournalEntriesSchema"
 
     post:
       summary: Create a journal entry.
@@ -1111,9 +1111,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/GetJournalEntrySchema"
 
-  /entries{entry_id}:
+  /entries/{entry_id}:
     parameters:
-      - in: paths
+      - in: path
         name: entry_id
         required: true
         schema:
@@ -1137,7 +1137,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "/components/schemas/CreateJournalEntry"
+              $ref: "#/components/schemas/CreateJournalEntrySchema"
       responses:
         "200":
           description: A full representation of the journal entry.
@@ -1226,7 +1226,7 @@ components:
         symptoms:
           type: array
           items:
-            $ref: "#/components/schema/SymptomSchema"
+            $ref: "#/components/schemas/SymptomSchema"
 
     GetJournalEntriesSchema:
       type: object
@@ -1234,7 +1234,7 @@ components:
         entries:
           type: array
           items:
-            $ref: "#/components/schema/GetJournalEntrySchema"
+            $ref: "#/components/schemas/GetJournalEntrySchema"
 
 ```
 
@@ -1337,7 +1337,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schema/GetJournalEntriesSchema"
+                $ref: "#/components/schemas/GetJournalEntriesSchema"
 
     post:
       summary: Create a journal entry.
@@ -1358,9 +1358,9 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
-  /entries{entry_id}:
+  /entries/{entry_id}:
     parameters:
-      - in: paths
+      - in: path
         name: entry_id
         required: true
         schema:
@@ -1388,7 +1388,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "/components/schemas/CreateJournalEntry"
+              $ref: "#/components/schemas/CreateJournalEntrySchema"
       responses:
         "200":
           description: A full representation of the journal entry.
@@ -1509,7 +1509,7 @@ components:
         symptoms:
           type: array
           items:
-            $ref: "#/components/schema/SymptomSchema"
+            $ref: "#/components/schemas/SymptomSchema"
 
     GetJournalEntriesSchema:
       type: object
@@ -1517,7 +1517,7 @@ components:
         entries:
           type: array
           items:
-            $ref: "#/components/schema/GetJournalEntrySchema"
+            $ref: "#/components/schemas/GetJournalEntrySchema"
 
 ```
 
@@ -1548,3 +1548,205 @@ def greet(who: str):
 While writing the OpenAPI spec we identified that the `GET /entries` endpoint could be enhanced with a couple of optional parameters:
 + limit &mdash; return the maximum number of entries to be retrieved.
 + open &mdash; if true, will only return the journal entries not associated to a given episode.
+
+Those are defined following the same approach explained in the prior section:
+
+```python
+@app.get("/entries")
+def list_entries(
+    is_status_open: Annotated[bool | None, Query(alias="open")] = None,
+    limit: Annotated[int | None, Query(ge=1)] = None,
+) -> GetJournalEntriesSchema:
+...
+```
+
+To prevent shadowing the `open` function, we define the query parameter as `is_status_open`, but that would be too weird from the URL request perspective, and therefore, it is aliased to `open` using `Annotated`.
+
+Similarly, we use the same technique for the `limit` URL query parameter, in which we enforce that the value of the limit URL query parameter must be greater or equal than one.
+
+## Step 6: Validating payloads with unknown fields
+
+It's considered a good security practice to force a validation error if a payload includes fields that haven't been defined in our schemas.
+
+In order to do so, you must ensure:
+
+1. That Pydantic forbids the presence of unknown fields in the request (see [Configuration for Pydantic models: `extra`](https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict.extra)).
+
+    ```python
+    from pydanctic import BaseModel, ConfigDict
+
+    class OrderItemSchema(BaseModel):
+        model_config = ConfigDict(extra="forbid")
+
+        product: str
+        size: Size
+        quantity: int
+    ```
+
+
+1. That the OpenAPI spec includes the statement `additionalProperties: false` in the schema definition.
+
+    ```yaml
+    OrderItemSchema:
+      type: object
+      properties:
+        product:
+          type: string
+        size:
+          type: string
+          enum:
+            - small
+            - medium
+            - large
+      required:
+        - product
+        - size
+        - quantity
+      additionalProperties: false
+    ```
+
+### Dizziness Tracker: Forcing a validation error on payloads with unknown fields
+
+Because it is considered a good security practice, we should prevent additional fields to be allowed in our schemas. As explained in the section above we need to:
+
+1. Configure our Pydantic models to forbid additional properties.
+
+1. State in our OpenAPI schema that we don't allow additional properties.
+
+After doing such changes, when sending extra fields you'll get a validation error:
+
+```
+HTTP/1.1 422 Unprocessable Entity
+content-length: 114
+content-type: application/json
+date: Mon, 16 Sep 2024 08:18:46 GMT
+server: uvicorn
+
+{
+    "detail": [
+        {
+            "input": "v9",
+            "loc": [
+                "body",
+                "model"
+            ],
+            "msg": "Extra inputs are not permitted",
+            "type": "extra_forbidden"
+        }
+    ]
+}
+```
+
+| EXAMPLE: |
+| :------- |
+| See [Dizziness Tracker: Preventing extra fields in the payload](dizziness-tracker/06_dizziness-tracker_prevent-extra-fields/) for a runnable example. |
+
+## Step 7: Overriding FastAPI's generated documentation
+
+Up until now our manually generated OpenAPI spec, and the API spec generated by FastAPI by reading our code live in separate worlds.
+
+While the OpenAPI spec generated by FastAPI is always correct (and therefore, should take precedence), if we have spent time manually crafting the OpenAPI spec we would at least validate that the manually created OpenAPI spec works with the application.
+
+This can be done by overriding the `openapi()` method on the object returned by `FastAPI()` function and making it return your own OpenAPI spec document:
+
+```python
+from pathlib import Path
+
+import
+```
+
+| NOTE: |
+| :---- |
+| Wiring a manually crafted OpenAPI spec doesn't change how the application handles validation using Pydantic. |
+
+By default, FastAPI's generated documentation is served in `/docs`, but it will allow us to both serve the SwaggerUI on a different URL and use a specific OpenAPI spec file:
+
+```python
+app = FastAPI(
+  openapi_url=<path-in-which-openapi-json-doc-will-be-served>,
+  docs_url=<url-for-serving-swagger-ui>
+)
+```
+
+| NOTE: |
+| :---- |
+| An OpenAPI file manually created is prone to errors. It is recommended to rely on the dynamically generated OpenAPI spec FastAPI creates as it will be always synchronized with the application code. |
+
+### Dizziness Tracker: Wiring our OpenAPI spec doc and tailoring the serving URLs
+
+In this section we override the `openapi()` method on the object returned by `FastAPI()` to wire our manually crafted OpenAPI spec file.
+
+For illustration purposes, we also customize the URLs in which that file is served, and where the SwaggerUI is served.
+
+```python
+app = FastAPI(
+    openapi_url="/openapi/entries.json",  # URL where OpenAPI spec is available
+    docs_url="/docs/entries",  # URL where SwaggerUI is available
+)
+
+# Overriding the `openapi()` method on the object FastAPI() returns
+oas_doc = yaml.safe_load((Path(__file__).parent / "../oas.yaml").read_text())
+
+app.openapi = lambda: oas_doc
+```
+
+| EXAMPLE: |
+| :------- |
+| See [Dizziness Tracker: wiring a custom OpenAPI spec](dizziness-tracker/07_dizziness-tracker_overriding-openapi/README.md) for a runnable example. |
+
+## Step 8: Accommodating the hexagonal architecture
+
+In this step we start adopting the hexagonal architecture (also called the architecture of ports and adapters) into our projects.
+
+As discussed in [Introducing the hexagonal architecture for microservices](../02_microservice-concepts/README.md#introducing-the-hexagonal-architecture-for-microservices), the core layer that implements the functionality plays the central role. In that core layer we attach adapters for the API and Data layer. Those adapters rely on ports that are interfaces defined in the core layer that ensure that the communication between the core, API, and data layers remains loosely coupled.
+
+We start that journey by redifining the project structure to reinforce the separation of concerns between layers.
+
+Then we design the models that will represent the information in our database.
+
+### Dizziness Tracker: Accommodating the hexagonal architecture
+
+In this section we start applying changes to the existing project to set up the architecture of ports and adapters.
+
+#### Step 8.1: Redefining the project structure
+
+As we will be adding content to the core, API, and data layer, we will need to redefine the project structure. As identified in the strategic design phase, the first microservice we will be working on will be:
+
+**Journal Entries** &mdash; A FastAPI microservice to manage journal entries and symptoms. It will expose a full CRUD API and own all the journal entries and symptoms data.
+
+We will structure the project as follows:
+
++ Business layer &mdash; implemented under `entries/entries_service`.
+
++ API layer &mdash; implemented under `entries/web/api`, as we will only implement a REST API adapter for the service
+
++ Data layer &mdash; implemented under `entries/repository`.
+
+
+#### Step 8.2: Designing the models
+
+In this step we wil deal with the definition of the database models for *Journal Entries* service. This means thinking about the database tables and their fields.
+
+Although it might be a little bit of an overkill, we will start with SQLAlchemy, a popular Python ORM, and transition to a native approach afterwards.
+
+That will let us think in terms of classes rather than pure tables.
+
+As recommended, we begin with a textual representation of the core model, and then tackle the supporting ones (if any). In our case, the core model will be the JournalEntry.
+
+| Model Property | Description |
+| :------------- | :---------- |
+| **ID** | Unique identifier of the journal entry, in UUID format. |
+| **day** | Date of the journal entry. |
+| **level** | The level of dizziness associated to the journal entry. It will be an enumerated value. |
+| **remarks** | Free text identifying any additional remarks about the entry. |
+| **episode ID** | The ID of the associated episode in the Episode service. |
+
+Another model we'd like to include in the Journal Entry service is the symptoms associated to a given level. There is a one-to-many relationship between the level (an enumerated value) and a list of symptoms.
+
+| Model Property | Description |
+| :------------- | :---------- |
+| **ID** | Unique identifier of the symptom. |
+| **desc** | Text identifying the symptom. |
+| **level** | The level value associated to this symptom. |
+
+This information will let us define the `JournalEntryModel` and `SymptomModel` in `entries/repository/models.py`.

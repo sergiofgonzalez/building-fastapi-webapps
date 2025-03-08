@@ -37,7 +37,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schema/GetJournalEntriesSchema"
+                $ref: "#/components/schemas/GetJournalEntriesSchema"
 
     post:
       summary: Create a journal entry.
@@ -58,9 +58,9 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
-  /entries{entry_id}:
+  /entries/{entry_id}:
     parameters:
-      - in: paths
+      - in: path
         name: entry_id
         required: true
         schema:
@@ -88,7 +88,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "/components/schemas/CreateJournalEntry"
+              $ref: "#/components/schemas/CreateJournalEntrySchema"
       responses:
         "200":
           description: A full representation of the journal entry.
@@ -209,7 +209,7 @@ components:
         symptoms:
           type: array
           items:
-            $ref: "#/components/schema/SymptomSchema"
+            $ref: "#/components/schemas/SymptomSchema"
 
     GetJournalEntriesSchema:
       type: object
@@ -217,4 +217,4 @@ components:
         entries:
           type: array
           items:
-            $ref: "#/components/schema/GetJournalEntrySchema"
+            $ref: "#/components/schemas/GetJournalEntrySchema"

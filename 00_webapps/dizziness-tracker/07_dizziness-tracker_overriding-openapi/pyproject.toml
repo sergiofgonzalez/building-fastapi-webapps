@@ -1,0 +1,17 @@
+[project]
+name = "07-dizziness-tracker-overriding-openapi"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["fastapi[standard]>=0.114.2"]
+
+[tool.ruff]
+# Set the maximum line length to 80
+line-length = 80
+
+[tool.ruff.lint]
+# # Add the `line-too-long` rule to the enforced rule set.
+# extend-select = ["E501"]
+
+select = ["ALL"]

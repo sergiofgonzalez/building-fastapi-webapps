@@ -160,6 +160,7 @@ components:
           format: uuid
         desc:
           type: string
+      additionalProperties: false
 
     CreateJournalEntrySchema:
       type: object
@@ -182,6 +183,7 @@ components:
       required:
         - day
         - level
+      additionalProperties: false
 
     ReplaceJournalEntrySchema:
       allOf:
@@ -191,6 +193,7 @@ components:
             episode_id:
               type: string
               format: uuid
+          additionalProperties: false
 
     GetJournalEntrySchema:
       type: object
@@ -219,6 +222,7 @@ components:
         episode_id:
           type: string
           format: uuid
+      additionalProperties: false
 
     UpdateJournalEntrySchema:
       type: object
@@ -238,6 +242,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/GetJournalEntrySchema"
+      additionalProperties: false
 
     GetEpisodeSchema:
       type: object
@@ -252,3 +257,4 @@ components:
           items:
             type: string
             format: uuid
+      additionalProperties: false
